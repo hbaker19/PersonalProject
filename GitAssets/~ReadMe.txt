@@ -1,0 +1,1 @@
+Scripts only. Will need standard assets fps controller, projectiles, and pickup/box prefabs.
