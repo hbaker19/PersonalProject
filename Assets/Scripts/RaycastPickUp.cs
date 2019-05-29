@@ -9,7 +9,7 @@ public class RaycastPickUp : MonoBehaviour
     public GameObject heldObject;
     public GameObject player;
     public Rigidbody rb;
-    public float thrust;
+    float timer = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -18,10 +18,15 @@ public class RaycastPickUp : MonoBehaviour
     }
 
     // Update is called once per frame
+    private void Update()
+    {
+        timer += Time.deltaTime;
+    }
+
     void FixedUpdate()
     {
-        //If the button is pressed and no item is being held...
-        if (Input.GetButtonDown("GrabItem") && ItemHeld == 0)
+        //If the button is pressed, no item is being held, and timer is above 0.3...
+        if (Input.GetButtonDown("GrabItem") && ItemHeld == 0 && timer >= 0.3f)
         {
             //Make a raycast.
             RaycastHit hit;
@@ -38,26 +43,21 @@ public class RaycastPickUp : MonoBehaviour
                     //Pick up the item.
                     heldObject.transform.parent = GameObject.FindWithTag("Player").transform;
                     rb = heldObject.GetComponent<Rigidbody>();
-                    
                     rb.isKinematic = true;
 
-
-
-                    //rb.MovePosition(transform.position + transform.forward * Time.deltaTime);
-                    //heldObject.transform.position = camera.transform.localPosition;
-                    //rb.MovePosition(player.transform.position + transform.up * 2);
-                    //heldObject.transform.position = transform.LookAt(camera.forward);
                     //Change ItemHeld to 1.
                     ItemHeld = 1;
                     //Log to console that the item was grabbed.
                     Debug.Log("You grabbed the " + heldObject);
+                    //Reset timer.
+                    timer = 0;
                 }
             }
 
         }
 
-        /*If the button is pressed while an item is held...
-        if (Input.GetButtonDown("GrabItem") && ItemHeld == 1 && heldObject != null)
+        //If the button is pressed while an item is held and the timer is above 0.3...
+        if (Input.GetButtonDown("GrabItem") && ItemHeld == 1 && heldObject != null && timer >= 0.3f)
         {
             //Drop the item.
             heldObject.transform.parent = null;
@@ -68,7 +68,9 @@ public class RaycastPickUp : MonoBehaviour
             heldObject = null;
             //Change ItemHeld to false.
             ItemHeld = 0;
-        }*/
+            //Reset timer.
+            timer = 0;
+        }
     }
 
 }
