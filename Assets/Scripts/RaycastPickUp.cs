@@ -8,19 +8,62 @@ public class RaycastPickUp : MonoBehaviour
     public int ItemHeld = 0;
     public GameObject heldObject;
     public GameObject player;
-    public Rigidbody rb;
     float timer = 0;
+    float throwPower = 0f;
+    Vector3 destination;
 
-    // Start is called before the first frame update
     void Start()
     {
         camera = Camera.main;
     }
 
-    // Update is called once per frame
     private void Update()
     {
         timer += Time.deltaTime;
+
+        RaycastHit hit;
+        if (Input.GetButton("Fire2") && heldObject != null)
+        {
+            heldObject.layer = 10;
+
+            if (Physics.Raycast(camera.transform.position, camera.transform.forward, out hit))
+            {
+                destination = hit.point;
+                //hit.point will show the exact place the projectile hits.
+            }
+            else
+            {
+                //Still want to shoot
+                destination = camera.transform.position + 50 * camera.transform.forward;
+            }
+
+            throwPower += Time.deltaTime;
+            Debug.Log(throwPower);
+            if (throwPower >= 2.0f)
+            {
+                throwPower = 10;
+            }
+        }
+        if (Input.GetButtonUp("Fire2") && heldObject != null)
+        {
+            Vector3 velocity = destination - transform.position;
+            velocity.Normalize();
+            heldObject.GetComponent<Rigidbody>().velocity = velocity * throwPower * 2;
+
+            heldObject.layer = 0;
+            //Drop the item.
+            heldObject.transform.parent = null;
+            heldObject.GetComponent<Rigidbody>().isKinematic = false;
+            //Log to console.
+            Debug.Log("You dropped the " + heldObject);
+            //Declare you aren't holding an item.
+            heldObject = null;
+            //Change ItemHeld to false.
+            ItemHeld = 0;
+            //Reset timer.
+            timer = 0;
+            throwPower = 0;
+        }
     }
 
     void FixedUpdate()
@@ -42,9 +85,8 @@ public class RaycastPickUp : MonoBehaviour
                     heldObject = hit.transform.gameObject;
                     //Pick up the item.
                     heldObject.transform.parent = GameObject.FindWithTag("Player").transform;
-                    rb = heldObject.GetComponent<Rigidbody>();
-                    rb.isKinematic = true;
-
+                    heldObject.GetComponent<Rigidbody>().isKinematic = true;
+                    
                     //Change ItemHeld to 1.
                     ItemHeld = 1;
                     //Log to console that the item was grabbed.
@@ -53,7 +95,6 @@ public class RaycastPickUp : MonoBehaviour
                     timer = 0;
                 }
             }
-
         }
 
         //If the button is pressed while an item is held and the timer is above 0.3...
@@ -72,5 +113,4 @@ public class RaycastPickUp : MonoBehaviour
             timer = 0;
         }
     }
-
 }
