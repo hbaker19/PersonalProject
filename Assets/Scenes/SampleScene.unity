@@ -334,11 +334,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 245935572}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ac8ac121b8bd4741b5a5a36335ff5a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 7cdbfd240a5d43a4a981473f8bfe6e2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 193635136}
   chaseDistance: 10
+  tossedObject: {fileID: 0}
+  tossedRange: 20
 --- !u!195 &245935574
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -602,7 +604,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 634776701}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 497.18, y: 4.57, z: 535.13}
+  m_LocalPosition: {x: 515.36, y: 4.57, z: 557.67}
   m_LocalScale: {x: 1, y: 10, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

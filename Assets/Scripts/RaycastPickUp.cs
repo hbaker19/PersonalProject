@@ -46,6 +46,9 @@ public class RaycastPickUp : MonoBehaviour
         }
         if (Input.GetButtonUp("Fire2") && heldObject != null)
         {
+            //If player releases button, change object's tag
+            heldObject.tag = "Tossed";
+
             Vector3 velocity = destination - transform.position;
             velocity.Normalize();
             heldObject.GetComponent<Rigidbody>().velocity = velocity * throwPower * 2;
@@ -56,14 +59,28 @@ public class RaycastPickUp : MonoBehaviour
             heldObject.GetComponent<Rigidbody>().isKinematic = false;
             //Log to console.
             Debug.Log("You dropped the " + heldObject);
-            //Declare you aren't holding an item.
-            heldObject = null;
             //Change ItemHeld to false.
             ItemHeld = 0;
             //Reset timer.
             timer = 0;
             throwPower = 0;
+            StartCoroutine(ThrownObject(heldObject));
+            heldObject = null;
         }
+        /*if (heldObject.GetComponent<Rigidbody>().IsSleeping() == true)
+        {
+            Debug.Log("Is sleeping");
+            heldObject.tag = "PickUp";
+            heldObject = null;
+        }*/
+    }
+    private IEnumerator ThrownObject(GameObject thrownObject)
+    {
+        while (!thrownObject.GetComponent<Rigidbody>().IsSleeping())
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+        thrownObject.tag = "PickUp";
     }
 
     void FixedUpdate()

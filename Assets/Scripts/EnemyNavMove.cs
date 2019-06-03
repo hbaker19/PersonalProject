@@ -28,13 +28,4 @@ public class EnemyNavMove : MonoBehaviour {
 			agent.destination = home;
 		}
 	}
-
-    /*private void OnCollisionEnter(Collision collision)
-    {
-        collision.gameObject.GetComponent<Rigidbody>().IsSleeping
-        if (collision.gameObject.tag == "PickUp" && gameObject.)
-        {
-
-        }
-    }*/
 }
