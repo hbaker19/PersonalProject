@@ -290,6 +290,7 @@ MonoBehaviour:
   ItemHeld: 0
   heldObject: {fileID: 0}
   player: {fileID: 193635136}
+  Suspicion: 0
 --- !u!114 &193635142
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -341,6 +342,8 @@ MonoBehaviour:
   chaseDistance: 10
   tossedObject: {fileID: 0}
   tossedRange: 20
+  objectDistance: 10
+  chaseDuration: 15
 --- !u!195 &245935574
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -520,7 +523,7 @@ GameObject:
   - component: {fileID: 634776702}
   m_Layer: 0
   m_Name: Wall (1)
-  m_TagString: Untagged
+  m_TagString: Light
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 8
@@ -536,8 +539,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 14.208221, y: 1, z: 14.783508}
-  m_Center: {x: 1.2006378, y: 0, z: -0.5331726}
+  m_Size: {x: 17.74707, y: 1.1406456, z: 19.760254}
+  m_Center: {x: 0.44122314, y: -0.070322804, z: -0.2750244}
 --- !u!65 &634776703
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1105,7 +1108,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: c6453f8e1f814744d8b94e5a6d1f9942, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: -0.38268343
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: c6453f8e1f814744d8b94e5a6d1f9942, type: 3}
       propertyPath: m_LocalRotation.z
@@ -1113,7 +1116,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: c6453f8e1f814744d8b94e5a6d1f9942, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.00000016292068
+      value: 0.92387956
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: c6453f8e1f814744d8b94e5a6d1f9942, type: 3}
       propertyPath: m_RootOrder
@@ -1125,7 +1128,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: c6453f8e1f814744d8b94e5a6d1f9942, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -45
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: c6453f8e1f814744d8b94e5a6d1f9942, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z

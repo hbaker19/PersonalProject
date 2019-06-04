@@ -11,6 +11,7 @@ public class RaycastPickUp : MonoBehaviour
     float timer = 0;
     float throwPower = 0f;
     Vector3 destination;
+    public int Suspicion = 0;
 
     void Start()
     {
@@ -38,8 +39,8 @@ public class RaycastPickUp : MonoBehaviour
             }
 
             throwPower += Time.deltaTime;
-            Debug.Log(throwPower);
-            if (throwPower >= 2.0f)
+            //Debug.Log(throwPower);
+            if (throwPower >= 1.5f)
             {
                 throwPower = 10;
             }
@@ -52,27 +53,19 @@ public class RaycastPickUp : MonoBehaviour
             Vector3 velocity = destination - transform.position;
             velocity.Normalize();
             heldObject.GetComponent<Rigidbody>().velocity = velocity * throwPower * 2;
-
             heldObject.layer = 0;
-            //Drop the item.
             heldObject.transform.parent = null;
             heldObject.GetComponent<Rigidbody>().isKinematic = false;
-            //Log to console.
             Debug.Log("You dropped the " + heldObject);
-            //Change ItemHeld to false.
             ItemHeld = 0;
             //Reset timer.
             timer = 0;
             throwPower = 0;
             StartCoroutine(ThrownObject(heldObject));
             heldObject = null;
+            Suspicion--;
+            Debug.Log(Suspicion);
         }
-        /*if (heldObject.GetComponent<Rigidbody>().IsSleeping() == true)
-        {
-            Debug.Log("Is sleeping");
-            heldObject.tag = "PickUp";
-            heldObject = null;
-        }*/
     }
     private IEnumerator ThrownObject(GameObject thrownObject)
     {
@@ -96,20 +89,19 @@ public class RaycastPickUp : MonoBehaviour
                 //If raycast hits an item tagged PickUp...
                 if(hit.transform.gameObject.tag == "PickUp")
                 {
-                    //Log to console that an item was found.
                     Debug.Log("I found a pickup");
                     //Declare what the HeldObject is.
                     heldObject = hit.transform.gameObject;
                     //Pick up the item.
                     heldObject.transform.parent = GameObject.FindWithTag("Player").transform;
                     heldObject.GetComponent<Rigidbody>().isKinematic = true;
-                    
-                    //Change ItemHeld to 1.
                     ItemHeld = 1;
-                    //Log to console that the item was grabbed.
                     Debug.Log("You grabbed the " + heldObject);
                     //Reset timer.
                     timer = 0;
+                    //Increase suspicion and log total suspicion.
+                    Suspicion++;
+                    Debug.Log(Suspicion);
                 }
             }
         }
@@ -120,14 +112,30 @@ public class RaycastPickUp : MonoBehaviour
             //Drop the item.
             heldObject.transform.parent = null;
             heldObject.GetComponent<Rigidbody>().isKinematic = false;
-            //Log to console.
             Debug.Log("You dropped the " + heldObject);
-            //Declare you aren't holding an item.
             heldObject = null;
-            //Change ItemHeld to false.
             ItemHeld = 0;
-            //Reset timer.
             timer = 0;
+            //Reduce suspicion and log total.
+            Suspicion--;
+            Debug.Log(Suspicion);
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Light")
+        {
+            player.tag = "PlayerInLight";
+            Suspicion++;
+            Debug.Log(Suspicion);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        player.tag = "Player";
+        Suspicion--;
+        Debug.Log(Suspicion);
     }
 }

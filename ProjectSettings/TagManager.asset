@@ -6,6 +6,8 @@ TagManager:
   tags:
   - PickUp
   - Tossed
+  - Light
+  - PlayerInLight
   layers:
   - Default
   - TransparentFX
