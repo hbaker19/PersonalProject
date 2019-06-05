@@ -49,7 +49,6 @@ public class RaycastPickUp : MonoBehaviour
         {
             //If player releases button, change object's tag
             heldObject.tag = "Tossed";
-
             Vector3 velocity = destination - transform.position;
             velocity.Normalize();
             heldObject.GetComponent<Rigidbody>().velocity = velocity * throwPower * 2;

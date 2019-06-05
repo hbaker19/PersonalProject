@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent))]
-public class EnemyBehavior : MonoBehaviour
+public class PatrolAndChase : MonoBehaviour
 {
-    //store the nav mesh agent
-    NavMeshAgent agent;
+    public Transform[] points;
+    private int destPoint = 0;
+    private NavMeshAgent agent;
+
     public GameObject player;
     public float chaseDistance = 30;
-    private Vector3 home;
     public GameObject tossedObject;
     public float tossedRange = 10;
     public float objectDistance = 10;
@@ -20,22 +20,44 @@ public class EnemyBehavior : MonoBehaviour
     public float playerTooClose = 5;
     public float suspicionTimer = 0;
 
-    /*If you want dynamic enemy movement (no home to return to)
-    then add a Vector3 startPosition. Set startPos to
-    transform.position in Start() and reset startPos to where
-    you want the enemy to stop next.*/
-
     void Start()
     {
-        home = transform.position;
         agent = GetComponent<NavMeshAgent>();
+
+        // Disabling auto-braking allows for continuous movement
+        // between points (ie, the agent doesn't slow down as it
+        // approaches a destination point).
+        //agent.autoBraking = false;
+
+        GotoNextPoint();
     }
 
-    // Update is called once per frame
+    void GotoNextPoint()
+    {
+        // Returns if no points have been set up
+        if (points.Length == 0)
+        {
+            Debug.Log("No points to patrol");
+        }
+
+        // Set the agent to go to the currently selected destination.
+        agent.destination = points[destPoint].position;
+
+        // Choose the next point in the array as the destination,
+        // cycling to the start if necessary.
+        destPoint = (destPoint + 1) % points.Length;
+    }
+
     void Update()
     {
+        // Choose the next destination point when the agent gets
+        // close to the current one.
+        if (!agent.pathPending && agent.remainingDistance < 0.5f)
+            GotoNextPoint();
+
+
         hitTime += Time.deltaTime;
-        
+
         /*This makes the enemy chase the player when they're holding an object.
         This can be used later when making the levels of suspicion.
         tossedObject = player.GetComponent<RaycastPickUp>().heldObject;*/
@@ -48,24 +70,25 @@ public class EnemyBehavior : MonoBehaviour
             hit = false;
         }
 
-        if (player.GetComponent<RaycastPickUp>().Suspicion >= 3) {
+        if (player.GetComponent<RaycastPickUp>().Suspicion >= 3)
+        {
             Debug.Log(player.GetComponent<RaycastPickUp>().Suspicion);
             ChasePlayer();
         }
-        
-        else if(tossedObject != null)
+
+        else if (tossedObject != null)
         {
             ChaseObject();
         }
         else
         {
-            GoHome();
+            //GoHome();
         }
-        if(hitTime > chaseDuration)
+        if (hitTime > chaseDuration)
         {
             hit = false;
         }
-        
+
         //Will add suspicion +1 per second if player is too close to enemy.
         Vector3 direction = player.transform.position - transform.position;
         if (direction.magnitude <= playerTooClose)
@@ -90,17 +113,7 @@ public class EnemyBehavior : MonoBehaviour
             Debug.Log("You hit the enemy");
         }
     }
-
-    void GoHome()
-    {
-        agent.destination = home;
-        Vector3 homeDirection = home - transform.position;
-        if (homeDirection.magnitude < 0.2f)
-        {
-            home = transform.position;
-        }
-    }
-
+    
     void ChaseObject()
     {
         //move the object towards the destination, which in this case
@@ -114,20 +127,6 @@ public class EnemyBehavior : MonoBehaviour
             {
                 //Never runs. Object falls asleep before enemy reaches it.
                 Debug.Log("Found the object");
-
-                int r = Random.Range(0, 2);
-
-                if (r == 0)
-                {
-                    GoHome();
-                    Debug.Log("Going Home");
-                }
-
-                if (r == 1)
-                {
-                    home = transform.position;
-                    Debug.Log("This is now home");
-                }
             }
         }
     }
