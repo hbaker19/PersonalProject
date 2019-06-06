@@ -19,6 +19,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             public float JumpForce = 30f;
             public AnimationCurve SlopeCurveModifier = new AnimationCurve(new Keyframe(-90.0f, 1.0f), new Keyframe(0.0f, 1.0f), new Keyframe(90.0f, 0.0f));
             [HideInInspector] public float CurrentTargetSpeed = 8f;
+            
 
 #if !MOBILE_INPUT
             private bool m_Running;
@@ -133,6 +134,16 @@ namespace UnityStandardAssets.Characters.FirstPerson
             if (CrossPlatformInputManager.GetButtonDown("Jump") && !m_Jump)
             {
                 m_Jump = true;
+            }
+
+            if (Input.GetButton("Crouch") && Grounded == true)
+            {
+                cam.transform.position = new Vector3(cam.transform.position.x, 0.8f, cam.transform.position.z);
+                m_Capsule.height = 1.2f;
+            }
+            if (Input.GetButtonUp("Crouch"))
+            {
+                m_Capsule.height = 1.6f;
             }
         }
 

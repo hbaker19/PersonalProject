@@ -17,7 +17,7 @@ public class EnemyBehavior : MonoBehaviour
     bool hit = false;
     float hitTime = 100;
     public float chaseDuration = 15;
-    public float playerTooClose = 5;
+    public float playerTooClose = 3;
     public float suspicionTimer = 0;
 
     /*If you want dynamic enemy movement (no home to return to)

@@ -96,6 +96,7 @@ public class RaycastPickUp : MonoBehaviour
                     heldObject.GetComponent<Rigidbody>().isKinematic = true;
                     ItemHeld = 1;
                     Debug.Log("You grabbed the " + heldObject);
+                    
                     //Reset timer.
                     timer = 0;
                     //Increase suspicion and log total suspicion.
